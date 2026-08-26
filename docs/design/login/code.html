@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Diário Gastronômico</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&amp;family=Playfair+Display:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#b85842",
+                        "surface-container": "#efeeeb",
+                        "on-tertiary-fixed": "#301409",
+                        "on-primary-container": "#fffbff",
+                        "tertiary-container": "#966a5b",
+                        "tertiary-fixed-dim": "#efbba9",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#f1deda",
+                        "inverse-surface": "#30312f",
+                        "outline": "#89726d",
+                        "inverse-on-surface": "#f2f0ed",
+                        "on-secondary-container": "#6f615e",
+                        "inverse-primary": "#ffb4a4",
+                        "surface": "#fbf9f6",
+                        "secondary": "#695b58",
+                        "surface-variant": "#e4e2df",
+                        "surface-bright": "#fbf9f6",
+                        "on-primary-fixed": "#3d0600",
+                        "secondary-container": "#f1deda",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#eae8e5",
+                        "primary": "#99402d",
+                        "on-surface-variant": "#56423e",
+                        "on-primary": "#ffffff",
+                        "background": "#fbf9f6",
+                        "on-secondary-fixed": "#231917",
+                        "on-error": "#ffffff",
+                        "on-background": "#1b1c1a",
+                        "outline-variant": "#dcc1bb",
+                        "on-secondary-fixed-variant": "#504441",
+                        "surface-container-highest": "#e4e2df",
+                        "surface-tint": "#9c432f",
+                        "tertiary": "#7a5244",
+                        "on-tertiary-container": "#fffbff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f5f3f0",
+                        "primary-fixed-dim": "#ffb4a4",
+                        "on-surface": "#1b1c1a",
+                        "secondary-fixed-dim": "#d5c3be",
+                        "primary-fixed": "#ffdad2",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#623e30",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-primary-fixed-variant": "#7d2c1a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "md": "16px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "2xl": "48px",
+                        "3xl": "64px"
+                    },
+                    fontFamily: {
+                        "h1-mobile": ["Playfair Display"],
+                        "caption": ["DM Sans"],
+                        "label": ["DM Sans"],
+                        "h4": ["Playfair Display"],
+                        "h1": ["Playfair Display"],
+                        "body-sm": ["DM Sans"],
+                        "h2": ["Playfair Display"],
+                        "body": ["DM Sans"],
+                        "body-lg": ["DM Sans"],
+                        "display": ["Playfair Display"],
+                        "h3": ["Playfair Display"]
+                    },
+                    fontSize: {
+                        "h1-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "h4": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "h1": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "h3": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center relative overflow-hidden">
+<!-- Background Image -->
+<div class="absolute inset-0 z-0">
+<div class="absolute inset-0 bg-background/80 backdrop-blur-sm z-10"></div>
+<div class="w-full h-full bg-cover bg-center" data-alt="A softly blurred, warm, intimate photograph of a beautifully set dining table in a high-end restaurant, featuring delicate wine glasses, warm ambient candlelight, and subtle wooden textures. The mood is romantic and curated, fitting a high-end digital scrapbook aesthetic. The lighting is soft and golden." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDeWNmbu-ktMPWKOtlY5_6RiZ-kU9Y90UG3moz-qtn6gOfrJdeBBXwGUf0WY2rnM0puqNxnH4ehd2TUwnmwPzDE0MlhIL-1l7rkeqIrkrKA7TtSUo5djxVDGDDc4ovL74CoJvIK8QxyemT2cpaqvQom41ipLXtnAqAik9t-6RnZJQtU61ryZQSW4ov0dUOaujhpc_RwUH58ITfTOEdKvvEql20Ad3qplGNBmMSqXNhHIBvXekPKkbueKQ')"></div>
+</div>
+<!-- Login Container -->
+<div class="relative z-20 w-full max-w-[480px] px-md py-xl md:p-3xl bg-surface/95 backdrop-blur-md shadow-[0px_10px_30px_rgba(74,62,59,0.08)] rounded-xl border border-outline-variant/30 flex flex-col items-center text-center mx-md md:mx-auto">
+<!-- Brand Logo -->
+<div class="mb-xl text-primary flex flex-col items-center">
+<span class="material-symbols-outlined text-[48px] mb-sm" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-display text-h3 md:text-h2 text-primary">Diário Gastronômico</span>
+</div>
+<!-- Headings -->
+<h1 class="font-h1-mobile md:font-h1 text-h1-mobile md:text-h1 text-on-surface mb-sm">Bem-vindos ao nosso diário</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-2xl">Onde guardamos nossas melhores memórias e descobertas gastronômicas</p>
+<!-- Form -->
+<form class="w-full flex flex-col gap-md">
+<div class="w-full text-left">
+<label class="sr-only" for="email">E-mail</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50" id="email" placeholder="E-mail" type="email"/>
+</div>
+<div class="w-full text-left">
+<label class="sr-only" for="password">Senha</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-on-surface-variant/50" id="password" placeholder="Senha" type="password"/>
+</div>
+<div class="w-full text-right mt-[-8px]">
+<a class="font-caption text-caption text-primary hover:text-primary-container transition-colors" href="#">Esqueci minha senha</a>
+</div>
+<button class="w-full bg-primary text-on-primary font-label text-label py-md rounded-lg hover:bg-primary-container transition-colors mt-sm flex items-center justify-center gap-sm" type="button">
+                Entrar
+            </button>
+<div class="relative flex py-sm items-center">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink-0 mx-md font-caption text-caption text-on-surface-variant">ou</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<button class="w-full bg-surface-container text-on-surface-variant font-label text-label py-md rounded-lg border border-outline-variant hover:bg-surface-container-high transition-colors flex items-center justify-center gap-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+                Continuar com Google
+            </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-2xl">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Ainda não tem um diário? <a class="text-primary font-medium hover:text-primary-container transition-colors" href="#">Criar conta</a>
+</p>
+</div>
+</div>
+</body></html>

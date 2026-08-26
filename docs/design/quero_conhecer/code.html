@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nosso Diário - Quero Conhecer</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#b85842",
+                      "surface-container": "#efeeeb",
+                      "on-tertiary-fixed": "#301409",
+                      "on-primary-container": "#fffbff",
+                      "tertiary-container": "#966a5b",
+                      "tertiary-fixed-dim": "#efbba9",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#f1deda",
+                      "inverse-surface": "#30312f",
+                      "outline": "#89726d",
+                      "inverse-on-surface": "#f2f0ed",
+                      "on-secondary-container": "#6f615e",
+                      "inverse-primary": "#ffb4a4",
+                      "surface": "#fbf9f6",
+                      "secondary": "#695b58",
+                      "surface-variant": "#e4e2df",
+                      "surface-bright": "#fbf9f6",
+                      "on-primary-fixed": "#3d0600",
+                      "secondary-container": "#f1deda",
+                      "surface-container-lowest": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "surface-container-high": "#eae8e5",
+                      "primary": "#99402d",
+                      "on-surface-variant": "#56423e",
+                      "on-primary": "#ffffff",
+                      "background": "#fbf9f6",
+                      "on-secondary-fixed": "#231917",
+                      "on-error": "#ffffff",
+                      "on-background": "#1b1c1a",
+                      "outline-variant": "#dcc1bb",
+                      "on-secondary-fixed-variant": "#504441",
+                      "surface-container-highest": "#e4e2df",
+                      "surface-tint": "#9c432f",
+                      "tertiary": "#7a5244",
+                      "on-tertiary-container": "#fffbff",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f5f3f0",
+                      "primary-fixed-dim": "#ffb4a4",
+                      "on-surface": "#1b1c1a",
+                      "secondary-fixed-dim": "#d5c3be",
+                      "primary-fixed": "#ffdad2",
+                      "surface-dim": "#dbdad7",
+                      "on-tertiary-fixed-variant": "#623e30",
+                      "tertiary-fixed": "#ffdbcf",
+                      "on-primary-fixed-variant": "#7d2c1a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "sm": "8px",
+                      "xl": "32px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "2xl": "48px",
+                      "3xl": "64px"
+              },
+              "fontFamily": {
+                      "h1-mobile": [
+                              "Playfair Display"
+                      ],
+                      "caption": [
+                              "DM Sans"
+                      ],
+                      "label": [
+                              "DM Sans"
+                      ],
+                      "h4": [
+                              "Playfair Display"
+                      ],
+                      "h1": [
+                              "Playfair Display"
+                      ],
+                      "body-sm": [
+                              "DM Sans"
+                      ],
+                      "h2": [
+                              "Playfair Display"
+                      ],
+                      "body": [
+                              "DM Sans"
+                      ],
+                      "body-lg": [
+                              "DM Sans"
+                      ],
+                      "display": [
+                              "Playfair Display"
+                      ],
+                      "h3": [
+                              "Playfair Display"
+                      ]
+              },
+              "fontSize": {
+                      "h1-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "caption": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h4": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h1": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h2": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "h3": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        
+        /* Custom scrollbar to match aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-low');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+        
+        .memory-card-shadow {
+            box-shadow: 0px 4px 20px rgba(74, 62, 59, 0.05);
+        }
+      </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col pb-[80px] md:pb-0">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-surface dark:bg-background shadow-none">
+<div class="flex justify-between items-center px-lg py-md w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-md">
+<img alt="Couple portrait" class="w-12 h-12 rounded-full object-cover border-2 border-surface-container" data-alt="A beautifully composed, high-end editorial portrait of a young, stylish couple laughing together over a warm cup of coffee in a sunlit, minimalist aesthetic cafe. Soft, natural lighting. The overall tone is intimate, warm, and curated, matching a modern corporate yet tactile aesthetic with creme and terracota undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7t_pUCzc7vf__plrUxMY7guhmrp26VxxB2u8XiFN_jjBU8TcnHjt6XkPAb7rleoJjpf8yivMrFMTbkSuPzVVcX6_IXe5IDvb9mSwr-E48bAKVrPIFpsE0TWwvDZh_o3xlPLEV_vob53geTum-j2bjlPhtzu-2a27XWZy4D7uFR6Kx0uZYhYc55IANaSdfwDWAOuIjXhMhB2MKBiB7QAURBXGWXBE_vQsqlRaL3VpsXdd-K9WDG7rRWA"/>
+<div>
+<h1 class="font-h2 text-h2 font-bold text-primary dark:text-primary-fixed">Nosso Diário</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Olá, Ana e Bruno</p>
+</div>
+</div>
+<button aria-label="Search" class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 28px;">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-lg py-lg grid grid-cols-4 md:grid-cols-12 gap-md md:gap-xl">
+<!-- Search Bar -->
+<div class="col-span-4 md:col-span-12 mb-sm md:mb-md">
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-md flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full pl-3xl pr-md py-md bg-surface-container-lowest border border-outline-variant rounded-lg font-body text-body text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors shadow-sm placeholder:text-on-surface-variant" placeholder="Buscar restaurante" type="text"/>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="col-span-4 md:col-span-12 mb-lg overflow-x-auto pb-xs hide-scrollbar flex gap-sm">
+<button class="whitespace-nowrap px-md py-sm bg-primary-fixed text-primary-fixed-variant font-label text-label rounded-full border border-primary-fixed transition-colors">
+                Quero conhecer
+            </button>
+<button class="whitespace-nowrap px-md py-sm bg-surface-container-low text-on-surface-variant font-label text-label rounded-full border border-outline-variant hover:bg-surface-container transition-colors">
+                Italiano
+            </button>
+<button class="whitespace-nowrap px-md py-sm bg-surface-container-low text-on-surface-variant font-label text-label rounded-full border border-outline-variant hover:bg-surface-container transition-colors">
+                Japonês
+            </button>
+<button class="whitespace-nowrap px-md py-sm bg-surface-container-low text-on-surface-variant font-label text-label rounded-full border border-outline-variant hover:bg-surface-container transition-colors">
+                Cafeteria
+            </button>
+</div>
+<!-- Bento Grid / Cards Area -->
+<div class="col-span-4 md:col-span-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden memory-card-shadow group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 duration-300">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img alt="Izakaya Nori" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A striking, moody, and warm architectural food photography shot of the exterior of an upscale Izakaya named Izakaya Nori. Warm glowing paper lanterns hang outside against a sleek, modern minimalist facade. The scene is lit with a cinematic, evening glow, emphasizing rich terracota, deep browns, and soft warm lighting. High-end editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ4kbbyItQEmavvgjYvYYxMUkBrCPbBHi9j4aJ7vrGsFoA00dQ8Pfqs9DOlT_lMLRx0Y1JAHE7l3AvJzbYiLm5ZgBN2N-zkFTkpZLTSbYI3KXPMYa62BpbwzxW7_talbKrrnrxxG1FW-HiWFD7e0l4JoiBmE-b7qRBKLzw_4hBrIHosOzKZ-JUWT8cCdjZesi6DSC1Op_627FQiKj4Cnxm3vu7lmqBjaTWpfij_ggiiGv4DvCUCrYbGQ"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/80 backdrop-blur-md rounded-full p-xs">
+<span class="material-symbols-outlined text-outline">bookmark_border</span>
+</div>
+</div>
+<div class="p-md flex flex-col gap-xs flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-h3 text-h3 text-on-surface font-semibold">Izakaya Nori</h3>
+</div>
+<span class="inline-block px-sm py-xs bg-secondary-container text-on-secondary-container font-caption text-caption rounded-md w-max mt-sm">
+                        Japonês
+                    </span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-auto pt-md">Adicionado há 2 dias</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden memory-card-shadow group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 duration-300">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img alt="Casa Toscana" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-quality, editorial food photography shot of a rustic, elegant Italian dish at 'Casa Toscana'. Fresh handmade pasta sits on a beautiful tactile ceramic plate on a linen-draped table. The lighting is soft, natural, and inviting, creating a warm, intimate 'digital scrapbook' aesthetic with rich creme and subtle terracota hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3JNcuDzWrzR5Vd9a-OgNXDGrMXPbcu8NLMNS6HvBZtljDPWjG_CnawpnMW2_S_kQtDIAsbdhvQVhSUaD-AveGffC2WhNKqBoR44OUvRUkvXUYNag8Enn_J6OV2fFa1OtrF-YcsjPoosPXhteisbgpNOzZFzo-Dw4Zh9dvVGO1Kp6j0CcVJ-LiNqS-xv_KRtB5Qew-VtZjxtb62Vqzv7rzNcLY8eYVCtOs41amxG2nE7AcUDVpaw2ifQ"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/80 backdrop-blur-md rounded-full p-xs">
+<span class="material-symbols-outlined text-outline">bookmark_border</span>
+</div>
+</div>
+<div class="p-md flex flex-col gap-xs flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-h3 text-h3 text-on-surface font-semibold">Casa Toscana</h3>
+</div>
+<span class="inline-block px-sm py-xs bg-secondary-container text-on-secondary-container font-caption text-caption rounded-md w-max mt-sm">
+                        Italiano
+                    </span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-auto pt-md">Adicionado há 1 semana</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden memory-card-shadow group cursor-pointer flex flex-col transition-transform hover:-translate-y-1 duration-300">
+<div class="relative w-full aspect-[4/3] overflow-hidden">
+<img alt="Brasa &amp; Vinho" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated, atmospheric photo of a modern steakhouse interior named 'Brasa &amp; Vinho'. Dark, moody elegance meets warm, intimate lighting. A glass of deep red wine catches the soft ambient light in the foreground, with blurred embers or a sleek modern grill in the background. Editorial, tactile aesthetic emphasizing deep browns and soft crèmes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQGL_A4TodCaW_sQygEG3S4lcl41x1X8gXSAQ_g6VW7glrzaaP7XbpOFvN3ZIYcpe9XVNmkDv_ZRs-THrvE17XhO3USW0G1LBd4dRFFmHkIkMKT10vKhxNLFULuisMkl9FBggRjUvfyE481iMsSs_YcAnToqYBHsbkxa-M4SbG5lAkh5BtNq-Gd3UaTTnJzFRZ4HDaRq9-st-mj7fVvCBmRzAhnCDfLb8i3R5dk_tzyQxSzww4yUAgew"/>
+<div class="absolute top-sm right-sm bg-surface-container-lowest/80 backdrop-blur-md rounded-full p-xs">
+<span class="material-symbols-outlined text-outline">bookmark_border</span>
+</div>
+</div>
+<div class="p-md flex flex-col gap-xs flex-grow">
+<div class="flex justify-between items-start">
+<h3 class="font-h3 text-h3 text-on-surface font-semibold">Brasa &amp; Vinho</h3>
+</div>
+<span class="inline-block px-sm py-xs bg-secondary-container text-on-secondary-container font-caption text-caption rounded-md w-max mt-sm">
+                        Carnes
+                    </span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-auto pt-md">Adicionado há 2 semanas</p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) / Shell Layout -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-md py-sm pb-safe bg-surface dark:bg-surface-container-low shadow-[0px_-4px_20px_rgba(74,62,59,0.05)] rounded-t-xl z-50">
+<!-- Active Tab: Início -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed font-bold hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-label text-label mt-xs">Início</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-label text-label mt-xs">Visitados</span>
+</a>
+<!-- FAB / Center Action -->
+<div class="relative -top-md">
+<button class="bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined" style="font-size: 32px;">add</span>
+</button>
+<span class="font-label text-label text-secondary dark:text-on-secondary-fixed-variant absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">Adicionar</span>
+</div>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-label text-label mt-xs">Favoritos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-on-secondary-fixed-variant hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label text-label mt-xs">Eu</span>
+</a>
+</nav>
+</body></html>

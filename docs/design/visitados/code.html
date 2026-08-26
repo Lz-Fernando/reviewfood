@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Visitados - Nosso Diário Gastronômico</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-container": "#b85842",
+                        "surface-container": "#efeeeb",
+                        "on-tertiary-fixed": "#301409",
+                        "on-primary-container": "#fffbff",
+                        "tertiary-container": "#966a5b",
+                        "tertiary-fixed-dim": "#efbba9",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#f1deda",
+                        "inverse-surface": "#30312f",
+                        "outline": "#89726d",
+                        "inverse-on-surface": "#f2f0ed",
+                        "on-secondary-container": "#6f615e",
+                        "inverse-primary": "#ffb4a4",
+                        "surface": "#fbf9f6",
+                        "secondary": "#695b58",
+                        "surface-variant": "#e4e2df",
+                        "surface-bright": "#fbf9f6",
+                        "on-primary-fixed": "#3d0600",
+                        "secondary-container": "#f1deda",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#eae8e5",
+                        "primary": "#99402d",
+                        "on-surface-variant": "#56423e",
+                        "on-primary": "#ffffff",
+                        "background": "#fbf9f6",
+                        "on-secondary-fixed": "#231917",
+                        "on-error": "#ffffff",
+                        "on-background": "#1b1c1a",
+                        "outline-variant": "#dcc1bb",
+                        "on-secondary-fixed-variant": "#504441",
+                        "surface-container-highest": "#e4e2df",
+                        "surface-tint": "#9c432f",
+                        "tertiary": "#7a5244",
+                        "on-tertiary-container": "#fffbff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f5f3f0",
+                        "primary-fixed-dim": "#ffb4a4",
+                        "on-surface": "#1b1c1a",
+                        "secondary-fixed-dim": "#d5c3be",
+                        "primary-fixed": "#ffdad2",
+                        "surface-dim": "#dbdad7",
+                        "on-tertiary-fixed-variant": "#623e30",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-primary-fixed-variant": "#7d2c1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "2xl": "48px",
+                        "3xl": "64px"
+                    },
+                    "fontFamily": {
+                        "h1-mobile": ["Playfair Display"],
+                        "caption": ["DM Sans"],
+                        "label": ["DM Sans"],
+                        "h4": ["Playfair Display"],
+                        "h1": ["Playfair Display"],
+                        "body-sm": ["DM Sans"],
+                        "h2": ["Playfair Display"],
+                        "body": ["DM Sans"],
+                        "body-lg": ["DM Sans"],
+                        "display": ["Playfair Display"],
+                        "h3": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "h1-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "label": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "h4": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "h1": ["32px", { "lineHeight": "40px", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "h2": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "h3": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0 font-body">
+<!-- Desktop Top Nav -->
+<header class="hidden md:flex justify-between items-center px-lg py-md w-full max-w-7xl mx-auto bg-surface shadow-none sticky top-0 z-50">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A warm, intimate portrait of a couple smiling softly, shot in soft natural light against a neutral creme background. The image evokes a sense of shared memory and curated aesthetics, fitting a digital heirloom scrapbook." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfbWV6vP_mQ-L3UjIVNas8EmEZFjb7jU29ZU1HI4CPVzvlK8VCRSXlF6OwcDUiPCylqBh2ik3Ujqji5tvosVB6cjpLLhvrtIY0-38lAGUg3NhvI4niGyU0KZ4s9Klbwfde9CIxvJ8tjqLbBx1FJg5mMZ10SZco50HL_4Vo-wWfHZ57CInMiSaJX3PbdYPSRPmQbWD9GMbhf5ewpxI51XtwrzlVnxlwN-Q0dS-3D2JxX5yNsh2RAvTbbg"/>
+</div>
+<span class="font-display text-h3 text-primary">Nosso Diário</span>
+</div>
+<nav class="flex gap-lg">
+<a class="text-on-surface-variant hover:opacity-80 transition-opacity font-body" href="#">Início</a>
+<a class="text-primary font-bold hover:opacity-80 transition-opacity font-body" href="#">Visitados</a>
+<a class="text-on-surface-variant hover:opacity-80 transition-opacity font-body" href="#">Adicionar</a>
+<a class="text-on-surface-variant hover:opacity-80 transition-opacity font-body" href="#">Favoritos</a>
+<a class="text-on-surface-variant hover:opacity-80 transition-opacity font-body" href="#">Eu</a>
+</nav>
+<button class="text-on-surface-variant hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</header>
+<!-- Mobile TopAppBar -->
+<div class="md:hidden w-full top-0 sticky bg-surface shadow-none z-50">
+<div class="flex justify-between items-center px-lg py-md w-full">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A small, soft-focus circular portrait of a smiling couple, designed as an avatar for a memory-keeping app. Warm lighting, modern tactile aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuADltHRvb9ohMJ4DFJW097c0VZqK7gPRNY2s6IFP52JhhzFoFRoihYQWiXHY6vdb1sYT9mFnOg39--UYUTQJJtA3D_SFTLz-aPmyAN6mmBkGgjvI-Fvcw18e7gCSsAtyqUdK9LAF7pzz7BtsULWt48sSmQjD72alkCuz8BMvfBKksgVGyYPUWTsqAYlp4SMD2qiD4L4p9xOnvJ28SRh6YnMSaLW3c17ZGL_rlXe6GnqzZ1b8tX4EY0BgA"/>
+</div>
+<h1 class="font-display text-h3 text-primary">Nosso Diário</h1>
+<button class="text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</div>
+</div>
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-[20px] md:px-lg py-lg">
+<!-- Page Header -->
+<section class="mb-lg">
+<h1 class="font-h1-mobile md:font-h1 text-on-background mb-sm">Nossas Experiências</h1>
+<p class="font-body text-on-surface-variant">Relembre os sabores e momentos que já vivemos juntos.</p>
+</section>
+<!-- Filters -->
+<section class="flex gap-sm overflow-x-auto pb-md mb-md hide-scrollbar">
+<button class="px-md py-sm bg-primary-container text-on-primary-container rounded-lg font-label text-label whitespace-nowrap border border-primary-container">
+                Todos
+            </button>
+<button class="px-md py-sm bg-surface-container text-on-surface rounded-lg font-label text-label whitespace-nowrap border border-surface-variant hover:border-outline transition-colors">
+                Nota Alta (9.0+)
+            </button>
+<button class="px-md py-sm bg-surface-container text-on-surface rounded-lg font-label text-label whitespace-nowrap border border-surface-variant hover:border-outline transition-colors">
+                Italiana
+            </button>
+<button class="px-md py-sm bg-surface-container text-on-surface rounded-lg font-label text-label whitespace-nowrap border border-surface-variant hover:border-outline transition-colors">
+                Mais Visitados
+            </button>
+</section>
+<!-- Grid of Experiences -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(74,62,59,0.05)] flex flex-col gap-sm relative hover:shadow-[0px_10px_30px_rgba(74,62,59,0.08)] transition-shadow">
+<div class="w-full aspect-[4/3] rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A beautifully plated rustic Italian pasta dish on a ceramic plate, sitting on a wooden table with soft, warm restaurant lighting. The mood is intimate and cozy, capturing a romantic dinner date memory." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuSBKP8lKbxHxyArMBAnZoNf33GgISUpqqI_uaJafVd9bWT3q3qGBFfJgtW8vRscAZh1ajIP0ZzX3h-_-ark1i2cD-QzcNy4tlyBSPaESNJVt0-AT9E8nK-qqyG7zVVZOnOXkYTUGmw6SfrBnJA8b9OX5u-3JposHLe7u_Tm_g0MdU90niS6r6YV7WjONHWtZTgk2ov8Q_z9EW4G5FTzrKxCyAWViN2jLJa_B1G34pxtY1CGngne1eSw"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-xs rounded-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label text-label text-on-surface">9.2</span>
+</div>
+</div>
+<div class="mt-xs flex justify-between items-start">
+<div>
+<h2 class="font-h4 text-on-background">Mamma Mia Trattoria</h2>
+<span class="inline-block px-sm py-xs bg-[#F9EBE7] text-primary rounded-full font-caption text-caption mt-xs">Italiana</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="history">history</span>
+                        2 visitas
+                    </span>
+<span class="font-caption text-caption text-on-surface-variant">Última: 15 Out 2023</span>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(74,62,59,0.05)] flex flex-col gap-sm relative hover:shadow-[0px_10px_30px_rgba(74,62,59,0.08)] transition-shadow">
+<div class="w-full aspect-[4/3] rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A sophisticated sushi platter featuring fresh nigiri and sashimi, presented on a dark slate board. Subtle, modern moody lighting highlights the glossy textures of the fish. High-end, curated digital scrapobok aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDu9RqEdDiMV6mgJ5U6KGEHWhk13xixaKzmfD7IXGVkL0cfe5DrOuCBOu-yQBd4d8UfB1pfzckfaftGzJ9VbdCjJ3O1K0asRzCuXZwwcFAFOb8qjNZ0eEb6Ehkj41Hp4tYQzGHsEvWLPKKXZOtaOvQ6oFCV2L05feaEiCpsbjbXhg8e-SvjO3w-ZLxzCeOvArqltRFxiMC_P_1-_-gq1sOeVwCfzxhdlormftMuEeaieocSmybsq-Icw"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-xs rounded-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label text-label text-on-surface">8.5</span>
+</div>
+</div>
+<div class="mt-xs flex justify-between items-start">
+<div>
+<h2 class="font-h4 text-on-background">Sakura Sushi Bar</h2>
+<span class="inline-block px-sm py-xs bg-[#F9EBE7] text-primary rounded-full font-caption text-caption mt-xs">Japonesa</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="history">history</span>
+                        1 visita
+                    </span>
+<span class="font-caption text-caption text-on-surface-variant">Última: 02 Set 2023</span>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-surface-container-lowest rounded-xl p-md shadow-[0px_4px_20px_rgba(74,62,59,0.05)] flex flex-col gap-sm relative hover:shadow-[0px_10px_30px_rgba(74,62,59,0.08)] transition-shadow">
+<div class="w-full aspect-[4/3] rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A close-up of an artisanal burger with melting cheese and crispy fries on the side, served on a rustic wooden tray. Casual, bright, and warm lighting evoking a fun, relaxed weekend date." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_4gbdhAdqlSnBTFwWjzCXMwuXFRDqNTxLPaBrB1hHLxBluF8Vm_jiu-Ql1MzVOcywoRw745VmOdFhwWW9ynECKUSYWGrzcMPdIGJjjiKJ1pW_ynxdW172avNLZnt9BkMeTDSsCEuBtgqIlFxhPMxF0GHdwwo7OZwwQWI9Aa357IkjsjGO6ciD2XTYkIYVwAT_KYVfGbsz5dFR3uC8FvufelmLsUyObxnztKygRrbfwyuJwxpkzZkKEw"/>
+<div class="absolute top-sm right-sm bg-surface/90 backdrop-blur-sm px-sm py-xs rounded-lg flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label text-label text-on-surface">9.8</span>
+</div>
+</div>
+<div class="mt-xs flex justify-between items-start">
+<div>
+<h2 class="font-h4 text-on-background">Burger &amp; Co.</h2>
+<span class="inline-block px-sm py-xs bg-[#F9EBE7] text-primary rounded-full font-caption text-caption mt-xs">Casual</span>
+</div>
+</div>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-surface-variant">
+<span class="font-caption text-caption text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="history">history</span>
+                        4 visitas
+                    </span>
+<span class="font-caption text-caption text-on-surface-variant">Última: 20 Ago 2023</span>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Nav for Mobile -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-surface border-t border-surface-variant shadow-[0px_-4px_20px_rgba(74,62,59,0.05)]">
+<div class="flex justify-around items-center px-md py-sm pb-safe bg-surface">
+<a class="flex flex-col items-center justify-center text-secondary font-label text-label hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span>Início</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold font-label text-label hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span>Visitados</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-label text-label hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span>Adicionar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-label text-label hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+<span>Favoritos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-label text-label hover:text-primary-container transition-colors active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>Eu</span>
+</a>
+</div>
+</nav>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>
