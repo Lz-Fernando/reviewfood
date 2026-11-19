@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('group_invitations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('group_id')->constrained('groups')->cascadeOnDelete();
-            $table->foreignUuid('invited_by_user_id')->constrained('users')->nullable()->nullOnDelete();
+            $table->foreignUuid('invited_by_user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('invited_email');
             $table->string('token_hash')->unique();
             $table->string('status', 20)->default('PENDING');
