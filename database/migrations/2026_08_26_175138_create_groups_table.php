@@ -16,13 +16,13 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name', 120)->nullable();
             $table->string('status', 20)->default('ACTIVE');
-            $table->timestamps();
+            $table->timestampsTz();
         });
 
         DB::statement("
             ALTER TABLE groups
-            ADD CONSTRAINT groups_status_check
-            CHECK (status IN ('ACTIVE', 'INACTIVE'));
+            ADD CONSTRAINT ck_groups_status
+            CHECK (status IN ('ACTIVE', 'ENDED'));
         ");
     }
 
