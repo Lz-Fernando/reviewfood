@@ -32,7 +32,7 @@ return new class extends Migration
 
         DB::statement("CREATE UNIQUE INDEX uq_group_invitations_pending ON group_invitations (group_id, lower(invited_email)) WHERE status = 'PENDING'");
 
-        DB::statement("CREATE INDEX idx_group_invitations_email_status ON group_invitations (lower(invited_email), status)");
+        DB::statement('CREATE INDEX idx_group_invitations_email_status ON group_invitations (lower(invited_email), status)');
     }
 
     /**

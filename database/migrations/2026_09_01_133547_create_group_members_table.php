@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -25,12 +25,12 @@ return new class extends Migration
         DB::statement("
             ALTER TABLE group_members
             ADD CONSTRAINT uq_group_members_group_user UNIQUE (group_id, user_id),
-            ADD CONSTRAINT ck_group_members_status CHECK (status IN ('ACTIVE', 'ENDED')),
-            ADD CONSTRAINT ck_group_members_dates CHECK ((status = 'ACTIVE' AND left_at IS NULL) OR (status = 'ENDED' AND left_at IS NOT NULL))
+            ADD CONSTRAINT ck_group_members_status CHECK (status IN ('ACTIVE', 'LEFT')),
+            ADD CONSTRAINT ck_group_members_dates CHECK ((status = 'ACTIVE' AND left_at IS NULL) OR (status = 'LEFT' AND left_at IS NOT NULL))
         ");
 
         DB::statement("CREATE UNIQUE INDEX uq_group_members_one_active_group ON group_members(user_id) WHERE status = 'ACTIVE';");
-        DB::statement("CREATE INDEX idx_group_members_group_status ON group_members(group_id, status);");
+        DB::statement('CREATE INDEX idx_group_members_group_status ON group_members(group_id, status);');
 
         DB::statement(<<<'SQL'
             CREATE OR REPLACE FUNCTION enforce_group_active_member_limit()

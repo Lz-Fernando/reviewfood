@@ -17,7 +17,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasUuids;
+    use HasFactory, HasUuids, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -35,6 +35,6 @@ class User extends Authenticatable
     public function groups(): BelongsToMany
     {
         return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')
-                    ->withPivot(['role', 'status', 'joined_at', 'left_at']);
+            ->withPivot(['role', 'status', 'joined_at', 'left_at']);
     }
 }

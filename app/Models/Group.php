@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Enums\GroupStatus;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-
-use App\Enums\GroupStatus;
 
 #[Fillable(['name'])]
 class Group extends Model
@@ -34,6 +33,6 @@ class Group extends Model
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'group_members', 'group_id', 'user_id')
-                    ->withPivot(['role', 'status', 'joined_at', 'left_at']);
+            ->withPivot(['role', 'status', 'joined_at', 'left_at']);
     }
 }

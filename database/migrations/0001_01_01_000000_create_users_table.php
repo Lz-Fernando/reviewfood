@@ -25,15 +25,15 @@ return new class extends Migration
             $table->timestampsTz();
         });
 
-        DB::statement("ALTER TABLE users
+        DB::statement('ALTER TABLE users
             ADD CONSTRAINT ck_users_auth_method
             CHECK (password IS NOT NULL OR google_id IS NOT NULL),
             ADD CONSTRAINT ck_users_avatar_storage
-            CHECK ((avatar_disk IS NOT NULL AND avatar_path IS NOT NULL) OR (avatar_disk IS NULL AND avatar_path IS NULL))"
+            CHECK ((avatar_disk IS NOT NULL AND avatar_path IS NOT NULL) OR (avatar_disk IS NULL AND avatar_path IS NULL))'
         );
 
         DB::statement('CREATE UNIQUE INDEX uq_users_email_ci ON users (lower(email))');
-        DB::statement("CREATE UNIQUE INDEX uq_users_google_id ON users (google_id) WHERE google_id IS NOT NULL");
+        DB::statement('CREATE UNIQUE INDEX uq_users_google_id ON users (google_id) WHERE google_id IS NOT NULL');
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

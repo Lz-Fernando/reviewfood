@@ -23,11 +23,11 @@ return new class extends Migration
             $table->unique(['restaurant_id', 'user_id'], 'uq_restaurant_preferences_user');
         });
 
-        DB::statement("
+        DB::statement('
             ALTER TABLE restaurant_preferences
             ADD CONSTRAINT ck_restaurant_preferences_exclusive
             CHECK (NOT (favorite AND would_not_return))
-        ");
+        ');
 
         DB::statement('CREATE INDEX idx_restaurant_preferences_favorites ON restaurant_preferences (user_id, favorite) WHERE favorite = TRUE');
         DB::statement('CREATE INDEX idx_restaurant_preferences_no_return ON restaurant_preferences (user_id, would_not_return) WHERE would_not_return = TRUE');
