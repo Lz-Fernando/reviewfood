@@ -7,6 +7,7 @@ use App\Enums\GroupMemberStatus;
 use App\Enums\GroupStatus;
 use App\Models\User;
 use App\Services\GroupService;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -154,5 +155,204 @@ class GroupServiceTest extends TestCase
             'id' => $second['invitation']->id,
             'status' => GroupInvitationStatus::PENDING->value,
         ]);
+    }
+
+    public function test_it_accepts_invitation_and_closes_empty_personal_group(): void
+    {
+        $userA = User::factory()->create(['email' => 'joao@example.com']);
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $personalGroupB = $this->service->createPersonalGroup($userB);
+
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $joinedGroup = $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+
+        $this->assertSame($groupA->id, $joinedGroup->id);
+
+        $this->assertDatabaseHas('groups', [
+            'id' => $personalGroupB->id,
+            'status' => GroupStatus::INACTIVE->value,
+        ]);
+
+        $this->assertDatabaseHas('group_members', [
+            'group_id' => $personalGroupB->id,
+            'user_id' => $userB->id,
+            'status' => GroupMemberStatus::LEFT->value,
+        ]);
+
+        $oldMembership = $personalGroupB->memberships()->where('user_id', $userB->id)->firstOrFail();
+        $this->assertNotNull($oldMembership->left_at);
+
+        $this->assertDatabaseHas('group_members', [
+            'group_id' => $groupA->id,
+            'user_id' => $userB->id,
+            'status' => GroupMemberStatus::ACTIVE->value,
+            'left_at' => null,
+        ]);
+
+        $this->assertSame(
+            2,
+            $groupA->memberships()->where('status', GroupMemberStatus::ACTIVE)->count()
+        );
+
+        $inviteResult['invitation']->refresh();
+        $this->assertSame(GroupInvitationStatus::ACCEPTED, $inviteResult['invitation']->status);
+        $this->assertNotNull($inviteResult['invitation']->responded_at);
+    }
+
+    public function test_it_accepts_invitation_when_user_has_no_existing_group(): void
+    {
+        $userA = User::factory()->create(['email' => 'joao@example.com']);
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $joinedGroup = $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+
+        $this->assertSame($groupA->id, $joinedGroup->id);
+        $this->assertDatabaseHas('group_members', [
+            'group_id' => $groupA->id,
+            'user_id' => $userB->id,
+            'status' => GroupMemberStatus::ACTIVE->value,
+        ]);
+    }
+
+    public function test_it_rejects_accepting_expired_invitation(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->travel(8)->days();
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+    }
+
+    public function test_it_rejects_accepting_invitation_for_different_email(): void
+    {
+        $userA = User::factory()->create();
+        $wrongUser = User::factory()->create(['email' => 'outro@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $wrongUser);
+    }
+
+    public function test_it_rejects_accepting_already_accepted_invitation(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+    }
+
+    public function test_it_rejects_third_member_accepting_invitation_into_full_group(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+        $userC = User::factory()->create(['email' => 'carlos@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $this->service->createPersonalGroup($userB);
+        $personalGroupC = $this->service->createPersonalGroup($userC);
+
+        $inviteB = $this->service->invite($groupA, $userA, 'maria@example.com');
+        $inviteC = $this->service->invite($groupA, $userA, 'carlos@example.com');
+
+        $this->service->acceptInvitation($inviteB['invitation'], $userB);
+
+        try {
+            $this->service->acceptInvitation($inviteC['invitation'], $userC);
+            $this->fail('Expected DomainException when a third member tries to join a full group.');
+        } catch (\DomainException) {
+            // Expected: user C must remain in their own active group
+        }
+
+        $this->assertDatabaseHas('groups', [
+            'id' => $personalGroupC->id,
+            'status' => GroupStatus::ACTIVE->value,
+        ]);
+        $this->assertSame(2, $groupA->memberships()->where('status', GroupMemberStatus::ACTIVE)->count());
+    }
+
+    public function test_database_trigger_blocks_third_active_member_in_group(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create();
+        $userC = User::factory()->create();
+
+        $group = $this->service->createPersonalGroup($userA);
+        $group->memberships()->create([
+            'user_id' => $userB->id,
+            'status' => GroupMemberStatus::ACTIVE,
+            'joined_at' => now(),
+        ]);
+
+        $this->expectException(QueryException::class);
+        $this->expectExceptionMessage('A group may have at most two active members in the MVP');
+
+        $group->memberships()->create([
+            'user_id' => $userC->id,
+            'status' => GroupMemberStatus::ACTIVE,
+            'joined_at' => now(),
+        ]);
+    }
+
+    public function test_it_rejects_accepting_invitation_when_personal_group_has_data(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $personalGroupB = $this->service->createPersonalGroup($userB);
+
+        $personalGroupB->tags()->create([
+            'created_by_user_id' => $userB->id,
+            'name' => 'Date',
+        ]);
+
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+    }
+
+    public function test_it_rejects_accepting_invitation_when_user_already_in_couple_group(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+        $userC = User::factory()->create();
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $groupB = $this->service->createPersonalGroup($userB);
+        $groupB->memberships()->create([
+            'user_id' => $userC->id,
+            'status' => GroupMemberStatus::ACTIVE,
+            'joined_at' => now(),
+        ]);
+
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
     }
 }

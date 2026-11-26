@@ -86,4 +86,61 @@ class GroupService
             'token' => $plainToken,
         ];
     }
+
+    public function acceptInvitation(GroupInvitation $invitation, User $user): Group
+    {
+        return DB::transaction(function () use ($invitation, $user): Group {
+            $destineGroup = Group::whereKey($invitation->group_id)->lockForUpdate()->firstOrFail();
+            $invite = GroupInvitation::whereKey($invitation->id)->lockForUpdate()->firstOrFail();
+
+            if ($invite->status !== GroupInvitationStatus::PENDING) {
+                throw new \DomainException('O status do convite não é pendente');
+            } elseif ($invite->expires_at->isPast()) {
+                throw new \DomainException('O convite está expirado');
+            } elseif (mb_strtolower(trim($user->email)) !== mb_strtolower(trim($invite->invited_email))) {
+                throw new \DomainException('O email do convite não pertence a esse usuário');
+            } elseif ($destineGroup->status !== GroupStatus::ACTIVE) {
+                throw new \DomainException('O grupo não está ativo');
+            } elseif ($destineGroup->memberships()->where('status', GroupMemberStatus::ACTIVE)->count() >= 2) {
+                throw new \DomainException('O grupo já têm 2 membros ativos');
+            }
+
+            $currentMembership = $user->memberships()->where('status', GroupMemberStatus::ACTIVE)->with('group')->first();
+
+            if ($currentMembership !== null) {
+                $currentUserGroup = $currentMembership->group;
+
+                if ($currentUserGroup->id === $destineGroup->id
+                    || $currentUserGroup->memberships()->where('status', GroupMemberStatus::ACTIVE)->count() !== 1
+                    || $currentUserGroup->restaurants()->exists()
+                    || $currentUserGroup->categories()->exists()
+                    || $currentUserGroup->tags()->exists())
+                {
+                    throw new \DomainException('O usuário já está em um grupo');
+                }
+
+                $user->memberships()->where('status', GroupMemberStatus::ACTIVE)->update([
+                    'status' => GroupMemberStatus::LEFT,
+                    'left_at' => now(),
+                ]);
+
+                $currentUserGroup->update([
+                    'status' => GroupStatus::INACTIVE,
+                ]);
+            }
+
+            $destineGroup->memberships()->create([
+                'user_id' => $user->id,
+                'status' => GroupMemberStatus::ACTIVE,
+                'joined_at' => now(),
+            ]);
+
+            $invite->update([
+                'status' => GroupInvitationStatus::ACCEPTED,
+                'responded_at' => now(),
+            ]);
+
+            return $destineGroup;
+        });
+    }
 }
