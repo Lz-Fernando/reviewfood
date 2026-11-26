@@ -43,19 +43,17 @@ class GroupService
             throw new \DomainException('O grupo não está ativo');
         }
 
-        if (!$group->memberships()->where('user_id', $inviter->id)->where('status', GroupMemberStatus::ACTIVE)->exists()) {
+        if (! $group->memberships()->where('user_id', $inviter->id)->where('status', GroupMemberStatus::ACTIVE)->exists()) {
             throw new \DomainException('O usuário não pertence a esse grupo');
         }
 
         if ($group->memberships()->where('status', GroupMemberStatus::ACTIVE)->count() >= 2) {
-            throw new \DomainException("O grupo já possui 2 usuários");
+            throw new \DomainException('O grupo já possui 2 usuários');
         }
 
         if ($normalizedEmail === mb_strtolower(trim($inviter->email))) {
             throw new \DomainException('Não é possivel convidar o próprio e-mail');
         }
-
-
 
         $plainToken = Str::random(64);
 
@@ -114,8 +112,7 @@ class GroupService
                     || $currentUserGroup->memberships()->where('status', GroupMemberStatus::ACTIVE)->count() !== 1
                     || $currentUserGroup->restaurants()->exists()
                     || $currentUserGroup->categories()->exists()
-                    || $currentUserGroup->tags()->exists())
-                {
+                    || $currentUserGroup->tags()->exists()) {
                     throw new \DomainException('O usuário já está em um grupo');
                 }
 
@@ -141,6 +138,65 @@ class GroupService
             ]);
 
             return $destineGroup;
+        });
+    }
+
+    public function declineInvitation(GroupInvitation $invitation, User $user): GroupInvitation
+    {
+        return DB::transaction(function () use ($invitation, $user): GroupInvitation {
+            $invite = GroupInvitation::whereKey($invitation->id)->lockForUpdate()->firstOrFail();
+
+            if ($invite->status !== GroupInvitationStatus::PENDING) {
+                throw new \DomainException('O status do convite não é pendente');
+            } elseif ($invite->expires_at->isPast()) {
+                throw new \DomainException('O convite está expirado');
+            } elseif (mb_strtolower(trim($user->email)) !== mb_strtolower(trim($invite->invited_email))) {
+                throw new \DomainException('O email do convite não pertence a esse usuário');
+            }
+
+            $invite->update([
+                'status' => GroupInvitationStatus::DECLINED,
+                'responded_at' => now(),
+            ]);
+
+            return $invite;
+        });
+    }
+
+    public function unlinkCouple(Group $group, User $actor): array
+    {
+        return DB::transaction(function () use ($group, $actor): array {
+            $currentUserGroup = Group::whereKey($group->id)->lockForUpdate()->firstOrFail();
+            $activeMemberships = $currentUserGroup->memberships()->where('status', GroupMemberStatus::ACTIVE)->with('user')->get();
+
+            if ($currentUserGroup->status !== GroupStatus::ACTIVE) {
+                throw new \DomainException('O grupo está inativo');
+            } elseif (! $activeMemberships->contains('user_id', $actor->id)) {
+                throw new \DomainException('O usuario não pertence a este grupo');
+            } elseif ($activeMemberships->count() !== 2) {
+                throw new \DomainException('O grupo não possue 2 integrantes');
+            }
+
+            $currentUserGroup->update([
+                'status' => GroupStatus::INACTIVE,
+            ]);
+
+            $newGroups = [];
+
+            foreach ($activeMemberships as $member) {
+                $member->update([
+                    'status' => GroupMemberStatus::LEFT,
+                    'left_at' => now(),
+                ]);
+
+                $newGroups[$member->user_id] = $this->createPersonalGroup($member->user);
+            }
+
+            $currentUserGroup->invitations()->where('status', GroupInvitationStatus::PENDING)->update([
+                'status' => GroupInvitationStatus::EXPIRED,
+            ]);
+
+            return $newGroups;
         });
     }
 }

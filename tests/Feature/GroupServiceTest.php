@@ -355,4 +355,169 @@ class GroupServiceTest extends TestCase
 
         $this->service->acceptInvitation($inviteResult['invitation'], $userB);
     }
+
+    public function test_it_declines_a_pending_invitation(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $personalGroupB = $this->service->createPersonalGroup($userB);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $declined = $this->service->declineInvitation($inviteResult['invitation'], $userB);
+
+        $this->assertSame(GroupInvitationStatus::DECLINED, $declined->status);
+        $this->assertNotNull($declined->responded_at);
+
+        $this->assertDatabaseHas('group_invitations', [
+            'id' => $declined->id,
+            'status' => GroupInvitationStatus::DECLINED->value,
+        ]);
+
+        $this->assertDatabaseHas('groups', [
+            'id' => $personalGroupB->id,
+            'status' => GroupStatus::ACTIVE->value,
+        ]);
+    }
+
+    public function test_it_rejects_declining_invitation_for_different_email(): void
+    {
+        $userA = User::factory()->create();
+        $wrongUser = User::factory()->create(['email' => 'outro@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->declineInvitation($inviteResult['invitation'], $wrongUser);
+    }
+
+    public function test_it_rejects_declining_expired_invitation(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->travel(8)->days();
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->declineInvitation($inviteResult['invitation'], $userB);
+    }
+
+    public function test_it_rejects_declining_already_accepted_invitation(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteResult = $this->service->invite($groupA, $userA, 'maria@example.com');
+
+        $this->service->acceptInvitation($inviteResult['invitation'], $userB);
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->declineInvitation($inviteResult['invitation'], $userB);
+    }
+
+    public function test_it_unlinks_couple_and_creates_new_personal_groups_for_both_members(): void
+    {
+        $userA = User::factory()->create(['email' => 'joao@example.com']);
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $this->service->createPersonalGroup($userB);
+
+        $inviteB = $this->service->invite($groupA, $userA, 'maria@example.com');
+        $pendingInviteC = $this->service->invite($groupA, $userA, 'carlos@example.com');
+
+        $this->service->acceptInvitation($inviteB['invitation'], $userB);
+
+        $newGroups = $this->service->unlinkCouple($groupA, $userA);
+
+        $this->assertCount(2, $newGroups);
+        $this->assertArrayHasKey($userA->id, $newGroups);
+        $this->assertArrayHasKey($userB->id, $newGroups);
+        $this->assertNotSame($groupA->id, $newGroups[$userA->id]->id);
+        $this->assertNotSame($groupA->id, $newGroups[$userB->id]->id);
+        $this->assertNotSame($newGroups[$userA->id]->id, $newGroups[$userB->id]->id);
+
+        $this->assertDatabaseHas('groups', [
+            'id' => $groupA->id,
+            'status' => GroupStatus::INACTIVE->value,
+        ]);
+
+        foreach ([$userA, $userB] as $member) {
+            $oldMembership = $groupA->memberships()->where('user_id', $member->id)->firstOrFail();
+            $this->assertSame(GroupMemberStatus::LEFT, $oldMembership->status);
+            $this->assertNotNull($oldMembership->left_at);
+
+            $newGroup = $newGroups[$member->id];
+            $this->assertDatabaseHas('groups', [
+                'id' => $newGroup->id,
+                'status' => GroupStatus::ACTIVE->value,
+            ]);
+            $this->assertDatabaseHas('group_members', [
+                'group_id' => $newGroup->id,
+                'user_id' => $member->id,
+                'status' => GroupMemberStatus::ACTIVE->value,
+                'left_at' => null,
+            ]);
+        }
+
+        $this->assertDatabaseHas('group_invitations', [
+            'id' => $inviteB['invitation']->id,
+            'status' => GroupInvitationStatus::ACCEPTED->value,
+        ]);
+
+        $this->assertDatabaseHas('group_invitations', [
+            'id' => $pendingInviteC['invitation']->id,
+            'status' => GroupInvitationStatus::EXPIRED->value,
+        ]);
+    }
+
+    public function test_it_rejects_unlinking_a_personal_group_with_one_member(): void
+    {
+        $userA = User::factory()->create();
+        $groupA = $this->service->createPersonalGroup($userA);
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->unlinkCouple($groupA, $userA);
+    }
+
+    public function test_it_rejects_unlinking_by_non_member(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+        $outsider = User::factory()->create();
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteB = $this->service->invite($groupA, $userA, 'maria@example.com');
+        $this->service->acceptInvitation($inviteB['invitation'], $userB);
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->unlinkCouple($groupA, $outsider);
+    }
+
+    public function test_it_rejects_unlinking_an_already_inactive_group(): void
+    {
+        $userA = User::factory()->create();
+        $userB = User::factory()->create(['email' => 'maria@example.com']);
+
+        $groupA = $this->service->createPersonalGroup($userA);
+        $inviteB = $this->service->invite($groupA, $userA, 'maria@example.com');
+        $this->service->acceptInvitation($inviteB['invitation'], $userB);
+
+        $this->service->unlinkCouple($groupA, $userA);
+
+        $this->expectException(\DomainException::class);
+
+        $this->service->unlinkCouple($groupA, $userA);
+    }
 }
